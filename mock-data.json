@@ -1,0 +1,189 @@
+{
+  "_comment": "Drives mockTransport for the Corvo SME RCF increase journey. Card type names stay generic for compatibility with the source demo renderer. All data is fictional demo data.",
+
+  "persona": {
+    "name": "James Thornfield",
+    "member_no": "CIF-TH-4471823",
+    "dob": "1978-11-22",
+    "tier": "Corvo Business Banking Relationship",
+    "phone": "+44 7700 900304",
+    "account_name": "Thornfield Precision Engineering Ltd",
+    "bank": "Corvo",
+    "account_masked": "**** 2910"
+  },
+
+  "policy": {
+    "policy_no": "RCF \u2022\u2022\u2022\u2022 2910",
+    "product": "Existing SME Revolving Credit Facility",
+    "in_force_since": "2022-10-04",
+    "sum_insured": 500000,
+    "currency": "GBP",
+    "waiting_period_days": 0
+  },
+
+  "required_documents": [
+    { "id": "kyc_profile", "label": "KYC profile valid until Oct 2026" },
+    { "id": "ubo_declaration", "label": "UBO declaration: James 67%, Emma 33%" },
+    { "id": "director_ids", "label": "Director IDs" },
+    { "id": "accounts_2022", "label": "2022 filed accounts" },
+    { "id": "accounts_2023", "label": "2023 filed accounts" },
+    { "id": "prior_credit_memo", "label": "Prior credit memo + current facility" },
+    { "id": "management_accounts_2024", "label": "2024 management accounts" },
+    { "id": "jlr_contract", "label": "Signed contract" }
+  ],
+
+  "claim_ref": "RCF-2026-TH-00291",
+
+  "turns": [
+    {
+      "id": "greeting",
+      "auto": true,
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Hi James, I'm Talia, your Corvo relationship banking assistant. What can I help with today?" }
+      ],
+      "rich_content": []
+    },
+    {
+      "id": "rcf_request",
+      "triggers": [
+        "increase my rcf",
+        "increase our rcf",
+        "increase our revolving credit facility",
+        "I've just signed a new contract with a major automotive manufacturer and need a $300,000 increase to my credit facility to fund it",
+        "'@ve just signed a new contract with a major automotive manufacturer and need a $300,000 increase to my credit facility to fund it",
+        "@ve just signed a new contract with a major automotive manufacturer and need a $300,000 increase to my credit facility to fund it",
+        "i've just signed a new contract with a major automotive manufacturer and need a 300000 increase to my credit facility to fund it",
+        "@ve just signed a new contract with a major automotive manufacturer and need a 300000 increase to my credit facility to fund it",
+        "increase to my credit facility",
+        "rcf increase",
+        "new contract",
+        "major automotive manufacturer",
+        "signed contract",
+        "automotive contract",
+        "we need 300k",
+        "300000",
+        "facility increase",
+        "line of credit"
+      ],
+      "suggestions": [
+        { "label": "Increase our RCF", "sends": "I've just signed a new contract with a major automotive manufacturer and need a $300,000 increase to my credit facility to fund it" },
+        { "label": "Check my balance", "noop": true },
+        { "label": "Make a payment", "noop": true }
+      ],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Right, I can help with that. I can see Thornfield already has a £200,000 revolving credit facility. The file will test your requested £300,000 increase against policy, serviceability and the signed contract, then propose a £500,000 limit if it holds." }
+      ],
+      "rich_content": [
+        { "type": "claim_type_identified", "data": { "cover": "Corvo Business Banking", "claim_type": "SME RCF increase", "condition": "£200,000 existing + £300,000 requested = £500,000 proposed limit", "plain_summary": "Increase existing £200,000 RCF to £500,000 for automotive working capital" } },
+        { "type": "cover_status", "data": { "policy_no": "RCF \u2022\u2022\u2022\u2022 2910", "product": "Existing SME Revolving Credit Facility", "in_force_since": "2022-10-04", "date_of_event": "2026-07-01", "cover_in_force": true, "waiting_period_met": true, "result": "eligible" } },
+        { "type": "claim_file_opened", "data": { "claim_ref": "RCF-2026-TH-00291", "required_documents": [
+          { "id": "kyc_profile", "label": "KYC profile valid until Oct 2026", "status": "validated" },
+          { "id": "ubo_declaration", "label": "UBO declaration: James 67%, Emma 33%", "status": "validated" },
+          { "id": "director_ids", "label": "Director IDs", "status": "validated" },
+          { "id": "accounts_2022", "label": "2022 filed accounts", "status": "validated" },
+          { "id": "accounts_2023", "label": "2023 filed accounts", "status": "validated" },
+          { "id": "prior_credit_memo", "label": "Prior credit memo + current facility", "status": "validated" },
+          { "id": "management_accounts_2024", "label": "2024 management accounts", "status": "required" },
+          { "id": "jlr_contract", "label": "Signed contract", "status": "required" }
+        ] } }
+      ]
+    },
+    {
+      "id": "upload_management_accounts",
+      "triggers": ["upload:management_accounts_2024"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Okay, the 2024 management accounts are validated. Revenue is up 10% year on year, EBITDA is £620,000, DSCR is 2.1x, leverage is 34%, and current ratio is 1.6x." }
+      ],
+      "rich_content": [
+        { "type": "document_status", "data": { "doc_id": "management_accounts_2024", "label": "2024 management accounts", "status": "validated", "issues": [] } }
+      ]
+    },
+    {
+      "id": "upload_jlr_contract",
+      "triggers": ["upload:jlr_contract"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Now, the signed contract is validated. I found one variance: the management accounts reference a £780,000 pipeline value, while the signed contract value is £760,000. The requested £300,000 headroom is about 39% of the signed contract value and still passes the serviceability checks, so I'll flag the variance for Sarah Chen and send the case for credit review." }
+      ],
+      "rich_content": [
+        { "type": "document_status", "data": { "doc_id": "jlr_contract", "label": "Signed contract", "status": "validated", "issues": [
+          { "code": "contract_value_variance", "message": "Management accounts cite £780,000; signed contract shows £760,000.", "fix": "reviewed_by_credit" }
+        ] } },
+        { "type": "payment_details", "data": { "account_name": "Thornfield Precision Engineering Ltd", "bank": "Corvo", "account_masked": "**** 2910", "name_match": true } }
+      ]
+    },
+    {
+      "id": "lodged",
+      "triggers": ["confirm disbursement", "confirm facility account", "submit for assessment", "send for assessment", "yes"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Done. Your RCF increase case is now with Sarah Chen for credit officer review today. The prepared memo shows the amount bridge clearly: £200,000 existing limit plus your requested £300,000 increase equals a proposed £500,000 limit at SONIA + 2.8%, with the risk grade unchanged at Medium." }
+      ],
+      "rich_content": [
+        { "type": "claim_lodged", "data": { "claim_ref": "RCF-2026-TH-00291", "status": "submitted_for_assessment", "sla": "same-day credit review", "next_steps": ["Sarah Chen reviews the prepared credit memo", "Credit decision captured", "Existing RCF amended in CoreBank"], "task_id": "SME-CREDIT-TH-00291" } },
+        { "type": "application_status_tracker", "data": {
+          "title": "Application status",
+          "current": "Under review",
+          "claim_ref": "RCF-2026-TH-00291",
+          "steps": [
+            { "label": "Documents received", "status": "done", "detail": "2 uploaded, 6 reused" },
+            { "label": "Under review", "status": "active", "detail": "Sarah Chen reviewing the credit memo" },
+            { "label": "Approved", "status": "pending", "detail": "Waiting for Sarah decision" },
+            { "label": "Facility booked", "status": "pending", "detail": "Starts after approval" },
+            { "label": "Facility letter ready", "status": "pending", "detail": "Generated after booking" }
+          ]
+        } }
+      ]
+    }
+  ],
+
+  "disbursement_accounts": [
+    { "id": "rcf", "type": "Business Current Account", "masked": "**** 2910", "primary": true },
+    { "id": "reserve", "type": "Business Reserve Account", "masked": "**** 8842" }
+  ],
+
+  "pos_offer": null,
+
+  "chips": [],
+
+  "loan_options": [
+    {
+      "id": "facility_increase",
+      "tag": "Viable path",
+      "name": "RCF amendment + FX hedge",
+      "recommended": true,
+      "badge": "Talia's first-ranked path",
+      "accent": "#0F5F46",
+      "accent_soft": "#E7F4EF",
+      "amount_label": "Requested increase",
+      "amount": "£300,000",
+      "repayment": "£500,000",
+      "repayment_unit": "proposed facility limit",
+      "repayment_note": "Revolving line with interest on drawn balance; annual review",
+      "rate": "SONIA + 2.8%",
+      "rate_comparison": "12-month review",
+      "fee": "No establishment fee; FX quote priced separately",
+      "best_for": "Strong fit when Thornfield wants flexible drawdown against the new contract and import-cost certainty through a linked hedge.",
+      "fit": "Flexible headroom for inventory and receivables while keeping the existing facility structure.",
+      "consider": "SONIA-linked pricing moves with market rates; hedge only covers agreed import exposures.",
+      "comparison": "Choose this if flexibility matters more than a fixed repayment schedule."
+    },
+    {
+      "id": "working_capital_loan",
+      "tag": "Viable path",
+      "name": "Working capital term loan",
+      "accent": "#1F8A5B",
+      "accent_soft": "#e9f6ef",
+      "amount_label": "Loan amount",
+      "amount": "£300,000",
+      "repayment": "12 months",
+      "repayment_unit": "amortising",
+      "repayment_note": "Monthly principal and interest matched to the production ramp",
+      "rate": "SONIA + 3.1%",
+      "rate_comparison": "Indicative; subject to approval",
+      "fee": "£1,500 setup fee; early repayment allowed",
+      "best_for": "Strong fit when Thornfield wants a ring-fenced contract funding line with a fixed repayment profile.",
+      "fit": "Clear repayment schedule for the contract build without increasing the revolving facility limit.",
+      "consider": "Less flexible if drawings fluctuate; full amount is funded up front.",
+      "comparison": "Choose this if repayment certainty matters more than revolving headroom."
+    }
+  ]
+}

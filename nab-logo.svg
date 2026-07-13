@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 460" role="img" aria-label="NAB">
+  <defs>
+    <linearGradient id="star" x1="38" y1="28" x2="392" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff6570"/>
+      <stop offset=".55" stop-color="#ed1b2f"/>
+      <stop offset="1" stop-color="#c8102e"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#star)" stroke="#c8102e" stroke-width="10" stroke-linejoin="round" d="M244 18 178 128 55 70l22 119L9 226l109 53-23 119 124-61 73 104 24-126 134-2-87-92 70-96-119 2L244 18z"/>
+  <path fill="#ed1b2f" d="M340 129h47L272 252h-34l102-123zm64 0h45L335 252h-34l103-123z"/>
+  <path fill="#231f20" d="M520 120c28-30 87-30 113-4 15 15 22 37 22 66v103h-62v-92c0-26-13-39-37-39-28 0-45 17-45 50v81h-62V98h59l12 22zm261 165-7-20c-14 16-38 25-69 25-42 0-70-25-70-60 0-40 34-62 101-62h35v-4c0-23-15-36-45-36-20 0-40 6-57 17l-21-42c25-15 57-23 95-23 58 0 91 27 91 83v122h-53zm-16-80h-29c-29 0-42 8-42 23 0 14 13 23 34 23 19 0 32-7 37-20v-26zm150-180v92c15-24 39-36 72-36 52 0 91 39 91 103s-39 106-91 106c-35 0-61-14-76-41l-10 36h-48V25h62zm49 209c31 0 52-21 52-51 0-29-21-50-52-50-30 0-52 21-52 50 0 30 22 51 52 51z"/>
+</svg>

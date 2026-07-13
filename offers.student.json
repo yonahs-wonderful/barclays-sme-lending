@@ -1,0 +1,49 @@
+[
+  {
+    "id": "student_fixed",
+    "tag": "Lowest cost",
+    "name": "Student Loan — Fixed",
+    "recommended": true,
+    "badge": "Best fit for you",
+    "accent": "#1F8A5B",
+    "accent_soft": "#e9f6ef",
+    "amount_label": "Amount",
+    "amount": "£50,000",
+    "repayment": "~£0 while studying",
+    "repayment_note": "interest-only in study, P&I after",
+    "rate": "4.99% p.a.",
+    "rate_comparison": "5.21% representative APR",
+    "fee": "No arrangement fee",
+    "best_for": "Lowest, predictable repayments with deferral while you study"
+  },
+  {
+    "id": "student_variable",
+    "tag": "Flexible",
+    "name": "Student Loan — Variable",
+    "accent": "#2A5FCF",
+    "accent_soft": "#eaf1fd",
+    "amount_label": "Amount",
+    "amount": "£50,000",
+    "repayment": "~£430",
+    "repayment_note": "redraw + extra repayments anytime",
+    "rate": "5.45% p.a. variable",
+    "rate_comparison": "5.60% representative APR",
+    "fee": "No arrangement fee",
+    "best_for": "Flexibility to pay extra or redraw, rate moves with the market"
+  },
+  {
+    "id": "student_loc",
+    "tag": "Pay as you go",
+    "name": "Student Line of Credit",
+    "accent": "#00395D",
+    "accent_soft": "#E6F6FD",
+    "amount_label": "Limit",
+    "amount": "up to £50,000",
+    "repayment": "~£190",
+    "repayment_note": "if fully drawn · interest on drawn balance",
+    "rate": "6.75% p.a. variable",
+    "rate_comparison": "interest only on what you use",
+    "fee": "~£120 / year",
+    "best_for": "Drawing tuition each semester — only pay interest on what you use"
+  }
+]

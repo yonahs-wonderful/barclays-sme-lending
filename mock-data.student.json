@@ -1,0 +1,134 @@
+{
+  "_comment": "Student-loan variant for mockTransport. SAME card type names + SAME doc ids as mock-data.json (renderers + upload triggers key on these ids); only labels/content differ. Fictional demo data.",
+
+  "persona": {
+    "name": "Daniel Reed",
+    "member_no": "Barclays-7782145",
+    "dob": "2007-03-14",
+    "tier": "Student Additions Account",
+    "phone": "+44 7700 900778",
+    "account_name": "Daniel Reed",
+    "bank": "Barclays",
+    "account_masked": "**** 2210"
+  },
+
+  "policy": {
+    "policy_no": "•••• 2210",
+    "product": "Barclays Student Additions Account",
+    "in_force_since": "2024-02-01",
+    "sum_insured": 50000,
+    "currency": "GBP",
+    "waiting_period_days": 0
+  },
+
+  "required_documents": [
+    { "id": "medical_report",    "label": "University admission letter" },
+    { "id": "claim_form",        "label": "Loan application & declaration" },
+    { "id": "medical_authority", "label": "Proof of enrolment" },
+    { "id": "id_check",          "label": "ID verification" },
+    { "id": "bank_details",      "label": "Disbursement account" }
+  ],
+
+  "claim_ref": "LR-2026-0051203",
+
+  "turns": [
+    {
+      "id": "greeting",
+      "auto": true,
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Hi Daniel — you're securely signed in to Barclays. What can I help you with today?" }
+      ],
+      "rich_content": []
+    },
+    {
+      "id": "loan_start",
+      "triggers": ["apply for a student loan", "student loan", "university", "tuition", "studying", "study", "education", "loan", "finance"],
+      "suggestions": ["Apply for a student loan", "Check my balance", "Make a payment"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Congratulations on starting university, Daniel. Let's get your student loan sorted. Based on your Barclays account in good standing, you're pre-qualified to borrow up to £50,000 for tuition and living costs. Choose the option that suits you below." }
+      ],
+      "rich_content": [
+        { "type": "claim_type_identified", "data": { "cover": "Barclays Student", "claim_type": "student loan", "plain_summary": "Student loan for tuition + living expenses" } },
+        { "type": "cover_status", "data": { "policy_no": "•••• 2210", "product": "Barclays Student Additions Account", "in_force_since": "2024-02-01", "date_of_event": "2026-06-08", "cover_in_force": true, "waiting_period_met": true, "result": "eligible" } },
+        { "type": "claim_file_opened", "data": { "claim_ref": "LR-2026-0051203", "required_documents": [
+          { "id": "medical_report",    "label": "University admission letter",  "status": "required" },
+          { "id": "claim_form",        "label": "Loan application & declaration", "status": "required" },
+          { "id": "medical_authority", "label": "Proof of enrolment",            "status": "validated" },
+          { "id": "id_check",          "label": "ID verification",               "status": "validated" },
+          { "id": "bank_details",      "label": "Disbursement account",          "status": "received" } ] } }
+      ]
+    },
+    {
+      "id": "upload_admission_clean",
+      "triggers": ["upload:medical_report"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Your university admission letter checks out — full-time enrolment confirmed for the upcoming semester. Validated." }
+      ],
+      "rich_content": [
+        { "type": "document_status", "data": { "doc_id": "medical_report", "label": "University admission letter", "status": "validated", "issues": [] } }
+      ]
+    },
+    {
+      "id": "upload_application_issue",
+      "triggers": ["upload:claim_form"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "One quick fix — your loan application needs a signature. Sign it below and you're all set." }
+      ],
+      "rich_content": [
+        { "type": "document_status", "data": { "doc_id": "claim_form", "label": "Loan application & declaration", "status": "issue", "issues": [ { "code": "declaration_unsigned", "message": "Applicant's declaration (Section 6) is not signed", "fix": "e_sign" } ] } }
+      ]
+    },
+    {
+      "id": "sign_application",
+      "triggers": ["sign:claim_form", "signed"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Signed — that's everything I need. Where would you like the funds disbursed?" }
+      ],
+      "rich_content": [
+        { "type": "document_status", "data": { "doc_id": "claim_form", "label": "Loan application & declaration", "status": "validated", "issues": [] } },
+        { "type": "payment_details", "data": { "account_name": "Daniel Reed", "bank": "Barclays", "account_masked": "**** 2210", "name_match": true } }
+      ]
+    },
+    {
+      "id": "confirm_disbursement",
+      "triggers": ["confirm disbursement", "Yes, use my Barclays account", "use my barclays account", "use my account", "confirm account", "yes"],
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "Perfect. Your disbursement account is locked in." }
+      ],
+      "rich_content": [
+        { "type": "document_status", "data": { "doc_id": "bank_details", "label": "Disbursement account", "status": "validated", "issues": [] } }
+      ]
+    },
+    {
+      "id": "lodged",
+      "triggers": ["submit for assessment", "send for assessment", "add eftpos", "skip eftpos", "confirm pos"],
+      "side_effect": "create_bo_task",
+      "events": [
+        { "type": "message", "speaker": "agent", "text": "You're all set, Daniel. Your application is complete, signed, and pre-assessed — it goes straight to a clean credit decision. Anything else I can help with?" }
+      ],
+      "rich_content": [
+        { "type": "claim_lodged", "data": { "claim_ref": "LR-2026-0051203", "status": "submitted_for_assessment", "sla": "2 business days", "next_steps": ["Credit assessment", "Conditional approval", "Funds to your account"], "task_id": null } }
+      ]
+    }
+  ],
+
+  "disbursement_accounts": [
+    { "id": "everyday",  "type": "Student Additions Account", "masked": "**** 2210", "primary": true },
+    { "id": "savings",   "type": "Barclays Rainy Day Saver",  "masked": "**** 6604" }
+  ],
+
+  "pos_offer": {
+    "name": "Barclays Student Card",
+    "tagline": "A free everyday card to manage your funds while you study.",
+    "price_after": "£0",
+    "features": [
+      "No international transaction fees",
+      "Tap, insert, swipe & mobile wallets",
+      "No lock-in contract — cancel anytime"
+    ]
+  },
+
+  "chips": [],
+
+  "loan_options": []
+}
