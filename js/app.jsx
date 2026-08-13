@@ -240,7 +240,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
       cards.forEach((c) => { byType[c.type] = c; });
       // Pre-qualified amount + line are domain-aware (business vs student), not
       // hardcoded \u2014 derived at boot from the active mock's prequal (window.TALPrequal).
-      const prequal = window.TALPrequal || "$500,000";
+      const prequal = window.TALPrequal || "£500,000";
       await sleep(paced(360));
       if (byType.claim_type_identified) setFile((prev) => applyCard(prev, byType.claim_type_identified));
       setStages((s) => Object.assign({}, s, { details: "done", eligibility: "loading" }));
@@ -568,7 +568,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
     if (started && expected && expected.kind === "reply" && !userHasSpoken && !auto.sentRequest) {
       auto.sentRequest = true;
       const suggested = expected.chips && expected.chips[0] && expected.chips[0].sends;
-      onSend(suggested || "I've just signed a new contract with a major automotive manufacturer and need a $300,000 increase to my credit facility to fund it");
+      onSend(suggested || "I've just signed a new contract with a major automotive manufacturer and need a £300,000 increase to my credit facility to fund it");
       return;
     }
     if (hasLoanOptions && !loanChoice && !auto.selectedLoan && loanOptions && loanOptions.length) {

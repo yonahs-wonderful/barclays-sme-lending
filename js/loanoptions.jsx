@@ -110,7 +110,7 @@ function LoanOptions({ ctx }) {
               <p>{action.best_for}</p>
             </div>
             <div className="nba-summary-facts">
-              <span className="nba-summary-basis"><b>$200,000 + $300,000</b> = proposed $500,000 limit</span>
+              <span className="nba-summary-basis"><b>£200,000 + £300,000</b> = proposed £500,000 limit</span>
               <span><b>{action.amount}</b> {action.amount_label}</span>
               <span><b>{action.rate}</b> indicative rate</span>
               <span><b>{action.repayment}</b> {action.repayment_unit || "limit"}</span>

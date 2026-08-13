@@ -88,7 +88,7 @@ const DOC_FILE_PREVIEW = {
     source: "Credit archive",
     updated: "29 Jun 2024",
     summary: "Current RCF terms and prior approval memo were reused for the increase.",
-    fields: [["Existing limit", "$200,000"], ["Facility ref", "RCF-2024-TH-00291"], ["Conduct", "Clean"]]
+    fields: [["Existing limit", "£200,000"], ["Facility ref", "RCF-2024-TH-00291"], ["Conduct", "Clean"]]
   },
   management_accounts_2024: {
     filename: "Thornfield_2024_Management_Accounts.pdf",
@@ -391,8 +391,8 @@ function ClaimLodgedCard({ data, ctx }) {
   const last4 = ((pay.account_masked || "").replace(/[^0-9]/g, "").slice(-4)) || "2910";
   const firstName = (window.TALPersonaName || "James").split(" ")[0];
   const isBooked = data.status === "booked";
-  const increase = loan.amount || "$300,000";
-  const newLimit = loan.repayment || "$500,000";
+  const increase = loan.amount || "£300,000";
+  const newLimit = loan.repayment || "£500,000";
   const etaDate = "Today · Wed 1 Jul";
   // Aspirational isometric storefront-expansion preview: an established shop
   // grows the requested expansion while the owner cheers (pre-approval, no
@@ -443,8 +443,8 @@ function ClaimLodgedCard({ data, ctx }) {
       <div className="l3-summary">
         <div className="l3-summary-title">Summary <span className="l3-summary-ref">{data.claim_ref}</span></div>
         <div className="l3-chips">
-          <span className="l3-chip"><b>{loan.amount || "$300,000"}</b> increase</span>
-          <span className="l3-chip"><b>{loan.repayment || "$500,000"}</b> new limit</span>
+          <span className="l3-chip"><b>{loan.amount || "£300,000"}</b> increase</span>
+          <span className="l3-chip"><b>{loan.repayment || "£500,000"}</b> new limit</span>
           <span className="l3-chip">{posAdded ? "Business specialist review added" : "No extra product added"}</span>
           {loan.rate && <span className="l3-chip">{loan.rate}</span>}
           <span className="l3-chip">{brandName()} ••{last4}</span>

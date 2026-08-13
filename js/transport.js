@@ -387,7 +387,7 @@
                   { label: "Make a payment", noop: true }
                 ]
               : [
-                  { label: "Increase our RCF", sends: "I've just signed a new contract with a major automotive manufacturer and need a $300,000 increase to my credit facility to fund it" },
+                  { label: "Increase our RCF", sends: "I've just signed a new contract with a major automotive manufacturer and need a £300,000 increase to my credit facility to fund it" },
                   { label: "Check my balance", noop: true },
                   { label: "Make a payment", noop: true }
                 ];
@@ -396,7 +396,7 @@
             // Steer toward the recommended facility amendment path.
             chips = isStudent
               ? [{ label: "Go with the fixed student loan", sends: "I'll go with the fixed student loan" }]
-              : [{ label: "Use the RCF increase", sends: "I'll go with the RCF increase to $500,000" }];
+              : [{ label: "Use the RCF increase", sends: "I'll go with the RCF increase to £500,000" }];
             break;
           case "documents":
             // The real upload affordance is the uploader card; keep this a light hint.
