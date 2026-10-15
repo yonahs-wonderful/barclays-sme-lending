@@ -1,0 +1,27 @@
+Hi Daniel and Elad,
+
+Here's the Barclays SME lending demo package, with the presenter script, both upload documents and all the demo links.
+
+Demo package: https://yonahs-wonderful.github.io/barclays-sme-lending/demo-pack/Barclays-demo-package.zip
+Presenter script (Word): https://yonahs-wonderful.github.io/barclays-sme-lending/demo-pack/Barclays-demo-presenter-script.docx
+2024 management accounts (PDF): https://yonahs-wonderful.github.io/barclays-sme-lending/demo-pack/Thornfield_2024_Management_Accounts.pdf
+Signed automotive supply contract (PDF): https://yonahs-wonderful.github.io/barclays-sme-lending/demo-pack/Signed_Contract.pdf
+
+Talia's customer frontend: https://yonahs-wonderful.github.io/barclays-sme-lending/
+Animated agent architecture: https://usa.app.demo.wonderful.ai/workspace/166dbd8c-42a9-4324-bb75-565b62bda5ba/apps/barclays-lending-architecture
+Human-in-the-loop credit cockpit: https://usa.app.demo.wonderful.ai/workspace/166dbd8c-42a9-4324-bb75-565b62bda5ba/apps/barclays-sme-credit-cockpit
+Back-office CoreBank application: https://yonahs-wonderful.github.io/barclays-corebank-demo/
+USA / Barclays activities (computer-agent runs and live desktop): https://usa.app.demo.wonderful.ai/workspace/166dbd8c-42a9-4324-bb75-565b62bda5ba/activities
+Talia's agent configuration: https://usa.app.demo.wonderful.ai/workspace/166dbd8c-42a9-4324-bb75-565b62bda5ba/agent-studio-v2/2b6de6c2-238f-4a31-8deb-03369021656e/instructions
+
+Suggested run-through:
+1. Open Talia and start a fresh session.
+2. Ask: "I've just signed a new contract with a major automotive manufacturer and need a £300,000 increase to my credit facility to fund it."
+3. Choose RCF amendment + FX hedge and click Confirm & continue.
+4. Upload the two PDFs in this package. Talia explains the £780,000 pipeline versus £760,000 signed-contract variance.
+5. Select the business current account ending 2910 and click Use this account once to submit.
+6. Open the new CoreBank Lending Entry task in USA / Barclays Activities to watch the computer agent. Wait for its task status to show Completed before describing the entry as finished.
+
+Use the architecture and cockpit as companion views to explain the wider agent story and human review. Their presence alone is not evidence that a live case or human approval has completed. Wonderful links require access to the USA / Barclays workspace.
+
+The conversation and computer-use automation are live; customer data, document checks and credit-review results are demo fixtures. No real credit approval or funds movement occurs. If the timed chat confirmation appears, it is explicitly simulated, not a verification of the computer task.
