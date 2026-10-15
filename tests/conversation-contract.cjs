@@ -11,3 +11,13 @@ const question=core.eventsToTurn([{speaker:'system',data:{type:'function_call',f
 assert.equal(question.events[0].text,'RCF means revolving credit facility.');assert.equal(question.rich_content.length,0);
 assert.equal(core.eventsToTurn([{speaker:'system',data:{type:'function_call',function_call:{name:'lookup_customer',output:{Response:{result:{name:'test'}}}}}}]).rich_content[0].type,'claim_type_identified');
 console.log('PASS: exact canonical text and cards, natural answers, no customer echo, legacy mapping');
+(async()=>{
+ const vm=require('node:vm');const {webcrypto}=require('node:crypto');
+ const replies=[{data:{session_id:'session',cursor:'0-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Hello'}}],cursor:'1-0'}},{data:{events:[],cursor:'1-0'}},{},{data:{events:[{speaker:'customer',data:{type:'text',text:'question'}}],cursor:'2-0'}},{data:{events:[],cursor:'2-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Delayed answer'}}],cursor:'3-0'}},{data:{events:[],cursor:'3-0'}}];
+ const sandbox={window:{LiveCore:core},crypto:webcrypto,fetch:async()=>({ok:true,json:async()=>replies.shift()}),URLSearchParams};
+ vm.createContext(sandbox);vm.runInContext(fs.readFileSync('js/transport.js','utf8'),sandbox);
+ const t=sandbox.window.TALTransport.createLiveTransport({bridgeUrl:'test'});
+ assert.equal((await t.getNextTurn()).events[0].text,'Hello');
+ assert.equal((await t.getNextTurn('question')).events[0].text,'Delayed answer');
+ assert.equal(replies.length,0);console.log('PASS: customer echo and empty poll cannot swallow delayed agent reply');
+})().catch(e=>{console.error(e);process.exitCode=1});
