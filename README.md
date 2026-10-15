@@ -36,3 +36,11 @@ James/Thornfield, financials, document validation, eligibility, pricing and Sara
 Run `node tests/conversation-contract.cjs` to verify exact copy/card mapping, natural answers, the original Max tool mapping, customer-echo filtering and delayed replies.
 
 Agent and bridge source are versioned in Wonderful Git in the Barclays workspace. The agent's `tools/lending_step/fixture.json` is copied from this repository's `mock-data.json`; update both together when changing canonical content. Do not put API credentials into this static site.
+
+## Timed demo confirmation
+Ten minutes after the submission card supplies a back-office task ID, Talia’s
+chat displays one positive message with the reference, labelled “Demo
+confirmation · simulated”. This is a presentation timer, not task-status
+verification or a voice/LLM response. Keep the customer tab open; reload
+starts a new conversation and cancels the timer. Background suspension may
+delay delivery. No additional back-office task is launched.

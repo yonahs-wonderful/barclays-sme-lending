@@ -166,6 +166,13 @@ function ChatIdle({ agent, onStart }) {
 
 function App({ brand, persona, transport, loanOptions, posOffer, disbursementAccounts }) {
   const [items, setItems] = React.useState([]);
+  const confirmationRef = React.useRef(null);
+  React.useEffect(() => {
+    confirmationRef.current = window.createDemoConfirmation(message => {
+      setItems(previous => previous.some(item => item.id === message.id) ? previous : previous.concat(message));
+    });
+    return () => confirmationRef.current.dispose();
+  }, []);
   const [typing, setTyping] = React.useState(false);
   const [file, setFile] = React.useState(() => ({
     documents: [],
@@ -267,6 +274,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
         const extra = cards[k];
         if (recogTypes[extra.type]) continue;
         setFile((prev) => applyCard(prev, extra));
+        confirmationRef.current?.schedule(extra);
         const panelOnly = (extra.type === "document_status" && extra.data.status !== "issue");
         if (!panelOnly) setItems((it) => it.concat([{ kind: "card", card: extra }]));
         await sleep(paced(220));
@@ -275,6 +283,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
       for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
         setFile((prev) => applyCard(prev, card));
+        confirmationRef.current?.schedule(card);
         if (card.type === "document_status") {
           const did = card.data.doc_id;
           setProcessing((p) => { const n = Object.assign({}, p); delete n[did]; return n; });
