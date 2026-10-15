@@ -327,6 +327,7 @@
     // The resulting lodge turn is merged into the same turn the UI renders, so the
     // claim_lodged card shows up right after disbursement with no extra user step.
     async function maybeRelayLoanChoice(turn) {
+      if (config.bridgeUrl) return turn; // Conversational Talia requires a real customer confirmation.
       if (loanRelaySent || !pendingLoanChoice) return turn;
       // Redesign flow: defer the auto-relay — the UI drives disbursement + package
       // confirmation explicitly, and the user's own "submit for assessment" text
@@ -360,7 +361,7 @@
         // never fires. At that submit step, substitute the STRONG, explicit lodge cue
         // (incl. the chosen option) that reliably triggers update_claim_status — the
         // same message the old single-step flow used. Fires once per session.
-        if (deferAutoRelay && !loanRelaySent && pendingLoanChoice
+        if (!config.bridgeUrl && deferAutoRelay && !loanRelaySent && pendingLoanChoice
             && typeof input === "string" && /submit|assess/i.test(input)) {
           input = "I confirm the " + pendingLoanChoice + ". Please submit my loan application for assessment now.";
           loanRelaySent = true;

@@ -52,7 +52,7 @@
   // contract: { events: [{type:'message',speaker,text}], rich_content: [card,...] }.
   function eventsToTurn(events) {
     var out = { events: [], rich_content: [] };
-    var canonical = null;
+    var canonical = [];
     (events || []).forEach(function (ev) {
       var d = ev && ev.data; if (!d) return;
       if (d.type === "text") {
@@ -61,7 +61,7 @@
         if (d.function_call.name === "lending_step") {
           var result = unwrapToolOutput(d.function_call.output);
           if (result && result.canonical_text) {
-            canonical = result.canonical_text;
+            if (canonical.indexOf(result.canonical_text) === -1) canonical.push(result.canonical_text);
             out.rich_content = out.rich_content.concat(result.rich_content || []);
           }
           return;
@@ -70,7 +70,7 @@
         if (card) out.rich_content.push(card);
       }
     });
-    if (canonical) out.events = [{type:"message",speaker:"agent",text:canonical}];
+    if (canonical.length) out.events = canonical.map(function(text) { return {type:"message",speaker:"agent",text:text}; });
     return out;
   }
 

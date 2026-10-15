@@ -11,13 +11,19 @@ const question=core.eventsToTurn([{speaker:'system',data:{type:'function_call',f
 assert.equal(question.events[0].text,'RCF means revolving credit facility.');assert.equal(question.rich_content.length,0);
 assert.equal(core.eventsToTurn([{speaker:'system',data:{type:'function_call',function_call:{name:'lookup_customer',output:{Response:{result:{name:'test'}}}}}}]).rich_content[0].type,'claim_type_identified');
 console.log('PASS: exact canonical text and cards, natural answers, no customer echo, legacy mapping');
+const multi=core.eventsToTurn(data.turns.slice(2,4).map(t=>({speaker:'system',data:{type:'function_call',function_call:{name:'lending_step',output:{Response:{result:{canonical_text:t.events[0].text,rich_content:t.rich_content}}}}}})));
+assert.deepEqual(multi.events.map(e=>e.text),data.turns.slice(2,4).map(t=>t.events[0].text));
+console.log('PASS: multiple tool responses preserve the financial and variance explanations');
 (async()=>{
  const vm=require('node:vm');const {webcrypto}=require('node:crypto');
  const replies=[{data:{session_id:'session',cursor:'0-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Hello'}}],cursor:'1-0'}},{},{data:{events:[{speaker:'customer',data:{type:'text',text:'question'}}],cursor:'2-0'}},{data:{events:[],cursor:'2-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Delayed answer'}}],cursor:'3-0'}}];
- const sandbox={window:{LiveCore:core},crypto:webcrypto,fetch:async()=>({ok:true,json:async()=>replies.shift()}),URLSearchParams,setTimeout};
+ const sent=[];
+ const sandbox={window:{LiveCore:core},crypto:webcrypto,fetch:async(url,opts)=>{sent.push(JSON.parse(opts.body));return {ok:true,json:async()=>replies.shift()};},URLSearchParams,setTimeout};
  vm.createContext(sandbox);vm.runInContext(fs.readFileSync('js/transport.js','utf8'),sandbox);
  const t=sandbox.window.TALTransport.createLiveTransport({bridgeUrl:'test'});
  assert.equal((await t.getNextTurn()).events[0].text,'Hello');
- assert.equal((await t.getNextTurn('question')).events[0].text,'Delayed answer');
+ t.setFlow('package');t.setLoanChoice('RCF increase');
+ assert.equal((await t.getNextTurn('What happens during assessment?')).events[0].text,'Delayed answer');
+ assert.equal(sent.find(r=>r.action==='send').text,'What happens during assessment?');
  assert.equal(replies.length,0);console.log('PASS: customer echo and empty poll cannot swallow delayed agent reply');
 })().catch(e=>{console.error(e);process.exitCode=1});
