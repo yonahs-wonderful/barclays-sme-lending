@@ -259,6 +259,7 @@
     // The mock matches literal "upload:<id>" / "sign:<id>"; a live agent needs words.
     function toAgentText(input) {
       if (typeof input !== "string") return "";
+      if (config.bridgeUrl && input === "confirm disbursement") return "I confirm the selected facility account. Please submit my RCF increase case for credit assessment now.";
       if (input.indexOf("upload:") === 0) {
         var id = input.slice(7);
         return "I've uploaded my " + (docLabels[id] || id.replace(/_/g, " ")) + ".";
