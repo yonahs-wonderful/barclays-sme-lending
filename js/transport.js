@@ -147,7 +147,11 @@
     function newToken() { return Array.from(crypto.getRandomValues(new Uint8Array(32))).map(function(n){return n.toString(16).padStart(2,"0");}).join(""); }
     async function bridge(action, data) {
       if (!bridgeToken) bridgeToken = newToken();
-      var r = await fetch(config.bridgeUrl, {method:"POST", headers:{"Content-Type":"text/plain"}, body:JSON.stringify(Object.assign({action:action,token:bridgeToken},data||{}))});
+      var r;
+      for(var attempt=0;attempt<3;attempt++) {
+        try { r = await fetch(config.bridgeUrl, {method:"POST", headers:{"Content-Type":"text/plain"}, body:JSON.stringify(Object.assign({action:action,token:bridgeToken},data||{}))}); break; }
+        catch(error) { if(action!=="poll" || attempt===2) throw error; await new Promise(function(resolve){setTimeout(resolve,500*(attempt+1));}); }
+      }
       var raw = await r.json();
       var result = raw.result || raw;
       if (!r.ok || result.error) throw new Error(result.error || "Chat service unavailable ("+r.status+")");
@@ -250,7 +254,7 @@
         var j = config.bridgeUrl ? await bridge("poll",{cursor:cursor,block:gotAny?1:10}) : await r.json();
         var evs = (j.data && j.data.events) || [];
         if (j.data && j.data.cursor) cursor = j.data.cursor;
-        if (evs.length) { collected.push.apply(collected, evs); gotAny = collected.some(function(e){ return e.speaker === "agent" && e.data && e.data.type === "text"; }); idle = 0; }
+        if (evs.length) { collected.push.apply(collected, evs); gotAny = collected.some(function(e){ return e.speaker === "agent" && e.data && e.data.type === "text"; }); idle = 0; if(config.bridgeUrl && gotAny) break; }
         else if (gotAny) { break; }       // burst finished
         else if (++idle >= 2) { break; }  // nothing at all after 2 long polls
       }

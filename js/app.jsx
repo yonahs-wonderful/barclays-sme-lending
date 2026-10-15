@@ -328,6 +328,10 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
     try {
       await sleep((window.ANALYSIS_MS || 3600) + paced(220));
       await step("upload:" + docId);
+    } catch (error) {
+      setTyping(false);
+      setItems((it) => it.concat([{kind:"message",speaker:"agent",text:"The document response was interrupted. Please ask me to continue; your uploaded document remains in this session."}]));
+      console.error("Document response failed:", error.message);
     } finally {
       runningRef.current = false; setBusy(false);
       setProcessing({});
@@ -359,6 +363,10 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
       setItems((it) => it.map((x) => x.kind === "scan" ? Object.assign({}, x, { done: true }) : x));
       // Verdicts must be delivered in claim order (the transport plays turns in sequence).
       for (let i = 0; i < jobs.length; i++) await step("upload:" + jobs[i].docId);
+    } catch (error) {
+      setTyping(false);
+      setItems((it) => it.concat([{kind:"message",speaker:"agent",text:"The document response was interrupted. Please ask me to continue; your uploaded document remains in this session."}]));
+      console.error("Document response failed:", error.message);
     } finally {
       runningRef.current = false; setBusy(false);
       setProcessing({});

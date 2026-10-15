@@ -13,8 +13,8 @@ assert.equal(core.eventsToTurn([{speaker:'system',data:{type:'function_call',fun
 console.log('PASS: exact canonical text and cards, natural answers, no customer echo, legacy mapping');
 (async()=>{
  const vm=require('node:vm');const {webcrypto}=require('node:crypto');
- const replies=[{data:{session_id:'session',cursor:'0-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Hello'}}],cursor:'1-0'}},{data:{events:[],cursor:'1-0'}},{},{data:{events:[{speaker:'customer',data:{type:'text',text:'question'}}],cursor:'2-0'}},{data:{events:[],cursor:'2-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Delayed answer'}}],cursor:'3-0'}},{data:{events:[],cursor:'3-0'}}];
- const sandbox={window:{LiveCore:core},crypto:webcrypto,fetch:async()=>({ok:true,json:async()=>replies.shift()}),URLSearchParams};
+ const replies=[{data:{session_id:'session',cursor:'0-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Hello'}}],cursor:'1-0'}},{},{data:{events:[{speaker:'customer',data:{type:'text',text:'question'}}],cursor:'2-0'}},{data:{events:[],cursor:'2-0'}},{data:{events:[{speaker:'agent',data:{type:'text',text:'Delayed answer'}}],cursor:'3-0'}}];
+ const sandbox={window:{LiveCore:core},crypto:webcrypto,fetch:async()=>({ok:true,json:async()=>replies.shift()}),URLSearchParams,setTimeout};
  vm.createContext(sandbox);vm.runInContext(fs.readFileSync('js/transport.js','utf8'),sandbox);
  const t=sandbox.window.TALTransport.createLiveTransport({bridgeUrl:'test'});
  assert.equal((await t.getNextTurn()).events[0].text,'Hello');
