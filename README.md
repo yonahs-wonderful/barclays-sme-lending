@@ -37,10 +37,14 @@ Run `node tests/conversation-contract.cjs` to verify exact copy/card mapping, na
 
 Agent and bridge source are versioned in Wonderful Git in the Barclays workspace. The agent's `tools/lending_step/fixture.json` is copied from this repository's `mock-data.json`; update both together when changing canonical content. Do not put API credentials into this static site.
 
-## Timed demo confirmation
-Ten minutes after the submission card supplies a back-office task ID, Talia’s
-chat displays one positive message with the reference, labelled “Demo
-confirmation · simulated”. This is a presentation timer, not task-status
-verification or a voice/LLM response. Keep the customer tab open; reload
-starts a new conversation and cancels the timer. Background suspension may
-delay delivery. No additional back-office task is launched.
+## Live milestone confirmations
+The current Barclays Talia chat checks its own submitted application's status
+through the existing authenticated bridge every three seconds. It displays one
+message when a fresh cockpit approval is saved and one when its CoreBank entry
+task completes successfully. Entry currently starts at submission, so these
+milestones may arrive in either order. Entry completion is not credit approval.
+The bridge binds the task/reference from the agent's server response and ignores
+cockpit decisions predating this submission. No timer fabricates success; failed
+or unavailable tasks never generate a completion message. Keep the tab open;
+reloading starts a new chat. Checks stop after both milestones or one hour.
+These are chat bubbles, not another LLM call or a resumed voice session.

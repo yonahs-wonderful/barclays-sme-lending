@@ -91,7 +91,6 @@ function Bubble({ msg, agent }) {
       <div className="bubble-row agent">
         <AgentAvatar agent={agent} />
         <div className="bubble agent">
-          {msg.demoConfirmation && <div style={{fontSize: 11, fontWeight: 600, marginBottom: 6, opacity: 0.7}}>Demo confirmation · simulated</div>}
           {text}
         </div>
       </div>

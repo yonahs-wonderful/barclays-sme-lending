@@ -432,6 +432,7 @@
         }
         return { kind: "reply", chips: chips };
       },
+      getMilestones: config.bridgeUrl ? function () { return bridge("milestones"); } : undefined,
       reset: function () { bridgeToken = null; sessionId = null; cursor = "0-0"; started = false; pendingLoanChoice = null; loanRelaySent = false; deferAutoRelay = false; phase = "start"; }
     };
   }

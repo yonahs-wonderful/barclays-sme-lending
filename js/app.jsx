@@ -168,9 +168,9 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
   const [items, setItems] = React.useState([]);
   const confirmationRef = React.useRef(null);
   React.useEffect(() => {
-    confirmationRef.current = window.createDemoConfirmation(message => {
+    confirmationRef.current = window.createMilestoneConfirmation(message => {
       setItems(previous => previous.some(item => item.id === message.id) ? previous : previous.concat(message));
-    });
+    }, transport.getMilestones);
     return () => confirmationRef.current.dispose();
   }, []);
   const [typing, setTyping] = React.useState(false);
