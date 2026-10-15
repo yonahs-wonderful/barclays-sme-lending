@@ -455,7 +455,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
     setTyping(true);
     await sleep(paced(820));
     setTyping(false);
-    setItems((it) => it.concat([{ kind: "message", speaker: "agent", text: "Great. I've added that to the RCF amendment file. Please upload the 2024 management accounts and the signed contract below." }]));
+    setItems((it) => it.concat([{ kind: "message", speaker: "agent", text: "Great. I've added your choice to the file and reused the existing KYC, UBO declaration, director IDs, 2022/2023 accounts, prior credit memo, and current facility details. I only need two new documents: please upload the 2024 management accounts and the signed contract below." }]));
     setStages((s) => Object.assign({}, s, { documents: "loading" }));
     await sleep(paced(900));
     setStages((s) => Object.assign({}, s, { documents: "done" }));
@@ -732,7 +732,7 @@ async function boot() {
         sub: "Both can support the new contract. Talia ranks the RCF amendment first because it preserves flexible headroom while adding hedge cover for imports." };
   window.TALEligLine = isStudent
     ? "Based on your account in good standing, you're eligible to apply. Here are three options — choose the one that fits."
-    : "Now, I've reused the existing KYC, UBO declaration, director IDs, 2022/2023 accounts, prior credit memo, and current facility details. I only need two documents before this goes to Sarah Chen.";
+    : "Here are two facility options for the new contract. Review them below, then confirm the path you'd like to take.";
 
   // Transport seam: mock by default; live when DEMO_CONFIG.mode === "live"
   // (liveTransport talks to the live agent through the chat proxy — see transport.js).
