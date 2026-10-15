@@ -250,7 +250,7 @@
         var j = config.bridgeUrl ? await bridge("poll",{cursor:cursor,block:gotAny?1:10}) : await r.json();
         var evs = (j.data && j.data.events) || [];
         if (j.data && j.data.cursor) cursor = j.data.cursor;
-        if (evs.length) { collected.push.apply(collected, evs); gotAny = true; idle = 0; }
+        if (evs.length) { collected.push.apply(collected, evs); gotAny = collected.some(function(e){ return e.speaker === "agent" && e.data && e.data.type === "text"; }); idle = 0; }
         else if (gotAny) { break; }       // burst finished
         else if (++idle >= 2) { break; }  // nothing at all after 2 long polls
       }
