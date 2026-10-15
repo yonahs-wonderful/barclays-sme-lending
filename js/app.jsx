@@ -202,16 +202,22 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
 
   React.useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
-    // Scroll once after layout. Repeated scrollIntoView calls restarted the
-    // animation as the reply and its widget arrived, causing a visible hitch.
-    const frame = requestAnimationFrame(() => {
-      el.scrollTo({
-        top: el.scrollHeight,
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth"
-      });
-    });
-    return () => cancelAnimationFrame(frame);
+    const scroll = () => {
+      if (bottomRef.current && typeof bottomRef.current.scrollIntoView === "function") {
+        bottomRef.current.scrollIntoView({ block: "end" });
+      } else if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+    };
+    scroll();
+    const raf1 = requestAnimationFrame(scroll);
+    const raf2 = requestAnimationFrame(() => requestAnimationFrame(scroll));
+    const timer = setTimeout(scroll, 160);
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      clearTimeout(timer);
+    };
   }, [items, typing]);
 
   async function step(input) {
