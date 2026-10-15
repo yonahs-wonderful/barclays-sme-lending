@@ -344,9 +344,18 @@ const SUBMITTED_REVIEW_TRACKER_STEPS = [
 
 function ApplicationStatusTrackerCard({ data, ctx }) {
   const fileStatus = ctx && ctx.file && ctx.file.status;
-  const trackerData = fileStatus === "submitted_for_assessment"
+  let trackerData = fileStatus === "submitted_for_assessment"
     ? Object.assign({}, data, { current: "Under review", steps: SUBMITTED_REVIEW_TRACKER_STEPS })
     : data;
+  const milestone = ctx?.milestones?.[data.claim_ref];
+  if (milestone) trackerData = {...trackerData,
+    current: milestone.approved ? (milestone.entry ? "Approved · application entry complete" : "Approved") : "Application entered · awaiting decision",
+    steps: [
+      {label: "Documents received", status: "done", detail: "2 uploaded, 6 reused"},
+      {label: "Human credit decision", status: milestone.approved ? "done" : "active", detail: milestone.approved ? "Approved in the credit cockpit" : "Awaiting credit review"},
+      {label: "CoreBank application entry", status: milestone.entry ? "done" : "active", detail: milestone.entry ? "Back-office task completed successfully" : "Back-office processing"}
+    ]
+  };
   const steps = trackerData.steps || [];
   if (!steps.length) return null;
   const complete = steps.every((step) => step.status === "done");

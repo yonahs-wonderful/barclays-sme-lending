@@ -166,9 +166,11 @@ function ChatIdle({ agent, onStart }) {
 
 function App({ brand, persona, transport, loanOptions, posOffer, disbursementAccounts }) {
   const [items, setItems] = React.useState([]);
+  const [milestones, setMilestones] = React.useState({});
   const confirmationRef = React.useRef(null);
   React.useEffect(() => {
     confirmationRef.current = window.createMilestoneConfirmation(message => {
+      setMilestones(previous => ({...previous, [message.reference]: {...previous[message.reference], [message.milestone]: true}}));
       setItems(previous => previous.some(item => item.id === message.id) ? previous : previous.concat(message));
     }, transport.getMilestones);
     return () => confirmationRef.current.dispose();
@@ -274,7 +276,6 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
         const extra = cards[k];
         if (recogTypes[extra.type]) continue;
         setFile((prev) => applyCard(prev, extra));
-        confirmationRef.current?.schedule(extra);
         const panelOnly = (extra.type === "document_status" && extra.data.status !== "issue");
         if (!panelOnly) setItems((it) => it.concat([{ kind: "card", card: extra }]));
         await sleep(paced(220));
@@ -283,7 +284,6 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
       for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
         setFile((prev) => applyCard(prev, card));
-        confirmationRef.current?.schedule(card);
         if (card.type === "document_status") {
           const did = card.data.doc_id;
           setProcessing((p) => { const n = Object.assign({}, p); delete n[did]; return n; });
@@ -301,6 +301,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
       // terminal deal (free first year) that the member can take or skip.
       if (cards.some((c) => c.type === "document_status" && c.data.doc_id === "bank_details" && c.data.status === "validated")) await revealPos();
     }
+    cards.forEach(card => confirmationRef.current?.schedule(card));
     const exp = transport.expectedInput();
     setExpected(exp);
     if (exp && exp.kind === "auto") { await sleep(paced(560)); await step(null); }
@@ -518,6 +519,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
   // ctx handed to every card renderer + the panel (live doc state + callbacks + affordance hint)
   const ctx = {
     scrollRef,
+    milestones,
     agent,
     file,
     expected: expected || {},

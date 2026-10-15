@@ -23,7 +23,7 @@
               for (const [name, ready, text] of milestones) {
                 if (!ready || state.sent.has(name)) continue;
                 state.sent.add(name);
-                onMessage({id: 'milestone:' + id + ':' + name, kind: 'message', speaker: 'agent',
+                onMessage({id: 'milestone:' + id + ':' + name, kind: 'message', speaker: 'agent', milestone: name, reference: status.reference,
                   text: text + ' Your reference is ' + status.reference + '.'});
               }
             }
