@@ -143,6 +143,16 @@
   function createLiveTransport(config) {
     config = config || {};
     var base = String(config.proxyUrl || config.baseUrl || "").replace(/\/$/, "");
+    var bridgeToken = null;
+    function newToken() { return Array.from(crypto.getRandomValues(new Uint8Array(32))).map(function(n){return n.toString(16).padStart(2,"0");}).join(""); }
+    async function bridge(action, data) {
+      if (!bridgeToken) bridgeToken = newToken();
+      var r = await fetch(config.bridgeUrl, {method:"POST", headers:{"Content-Type":"text/plain"}, body:JSON.stringify(Object.assign({action:action,token:bridgeToken},data||{}))});
+      var raw = await r.json();
+      var result = raw.result || raw;
+      if (!r.ok || result.error) throw new Error(result.error || "Chat service unavailable ("+r.status+")");
+      return result;
+    }
     var sessionId = null, cursor = "0-0", started = false;
     var docLabels = {}; // learned from claim_file_opened so uploads name the right document
     var loanType = "business"; // tracked from claim_type_identified; selects the booking template
@@ -210,6 +220,7 @@
     function api(path) { return base + "/api/v3/chat" + path; }
 
     async function createSession() {
+      if (config.bridgeUrl) { var j = await bridge("start"); sessionId=j.data.session_id; cursor=j.data.cursor||"0-0"; return; }
       var r = await fetch(api(""), { method: "POST", headers: headers(), body: JSON.stringify({
         agent_id: config.agentId, source: "in_website", comm_type: "chat", channel: "web",
         from: config.fromName || "demo", from_type: "name", send_internal_events: true
@@ -219,6 +230,7 @@
       sessionId = j.data.session_id; cursor = j.data.cursor || "0-0";
     }
     async function sendMessage(text) {
+      if (config.bridgeUrl) { await bridge("send",{text:text,event_id:crypto.randomUUID()}); return; }
       var r = await fetch(api("/" + sessionId), { method: "POST", headers: headers(), body: JSON.stringify({
         event_id: "c-" + Date.now(), session_id: sessionId, speaker: "customer",
         data: { type: "text", text: text }
@@ -233,9 +245,9 @@
         // Wait long for the turn to START (block=20); once events arrive, poll briefly
         // (block=3) so the END of the burst is detected in ~3s, not a full 20s.
         var block = gotAny ? 3 : 20;
-        var r = await fetch(api("/" + sessionId + "?cursor=" + encodeURIComponent(cursor) + "&block=" + block), { headers: headers() });
-        if (!r.ok) throw new Error("poll failed: " + r.status);
-        var j = await r.json();
+        var r = config.bridgeUrl ? null : await fetch(api("/" + sessionId + "?cursor=" + encodeURIComponent(cursor) + "&block=" + block), { headers: headers() });
+        if (r && !r.ok) throw new Error("poll failed: " + r.status);
+        var j = config.bridgeUrl ? await bridge("poll",{cursor:cursor,block:gotAny?1:10}) : await r.json();
         var evs = (j.data && j.data.events) || [];
         if (j.data && j.data.cursor) cursor = j.data.cursor;
         if (evs.length) { collected.push.apply(collected, evs); gotAny = true; idle = 0; }
@@ -414,7 +426,7 @@
         }
         return { kind: "reply", chips: chips };
       },
-      reset: function () { sessionId = null; cursor = "0-0"; started = false; pendingLoanChoice = null; loanRelaySent = false; deferAutoRelay = false; phase = "start"; }
+      reset: function () { bridgeToken = null; sessionId = null; cursor = "0-0"; started = false; pendingLoanChoice = null; loanRelaySent = false; deferAutoRelay = false; phase = "start"; }
     };
   }
 

@@ -52,15 +52,25 @@
   // contract: { events: [{type:'message',speaker,text}], rich_content: [card,...] }.
   function eventsToTurn(events) {
     var out = { events: [], rich_content: [] };
+    var canonical = null;
     (events || []).forEach(function (ev) {
       var d = ev && ev.data; if (!d) return;
       if (d.type === "text") {
         if (ev.speaker === "agent" && d.text) out.events.push({ type: "message", speaker: "agent", text: d.text });
       } else if (d.type === "function_call" && d.function_call) {
+        if (d.function_call.name === "lending_step") {
+          var result = unwrapToolOutput(d.function_call.output);
+          if (result && result.canonical_text) {
+            canonical = result.canonical_text;
+            out.rich_content = out.rich_content.concat(result.rich_content || []);
+          }
+          return;
+        }
         var card = mapToolToCard(d.function_call.name, d.function_call.output);
         if (card) out.rich_content.push(card);
       }
     });
+    if (canonical) out.events = [{type:"message",speaker:"agent",text:canonical}];
     return out;
   }
 

@@ -302,6 +302,12 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
     runningRef.current = true; setBusy(true);
     if (userMsg) setItems((it) => it.concat([Object.assign({ kind: "message", speaker: "customer" }, userMsg)]));
     try { await step(input); }
+    catch (error) {
+      setTyping(false);
+      setProcessing({});
+      setItems((it) => it.concat([{kind:"message",speaker:"agent",text:"The connection was interrupted. Please try again, or reset the demo. Your application has not been confirmed as submitted."}]));
+      console.error("Chat failed:", error.message);
+    }
     finally {
       runningRef.current = false; setBusy(false);
       setProcessing({}); // safety net: clear any spinner left by an unmatched upload/sign
