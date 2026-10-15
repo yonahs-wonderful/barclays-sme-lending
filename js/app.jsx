@@ -461,7 +461,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
     const label = (account.type || "Account") + " · " + (account.masked || "");
     setFile((prev) => {
       const f = JSON.parse(JSON.stringify(prev));
-      f.payment = { account_name: account.name, account_type: account.type, bank: (brand && brand.name) || "Corvo", account_masked: account.masked, name_match: true, confirmed: true };
+      f.payment = { account_name: account.name, account_type: account.type, bank: (brand && brand.name) || "Barclays", account_masked: account.masked, name_match: true, confirmed: true };
       return f;
     });
     run("confirm disbursement", { variant: "account", label: label });
@@ -474,7 +474,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
     setTyping(true);
     await sleep(paced(900));
     setTyping(false);
-    setItems((it) => it.concat([{ kind: "message", speaker: "agent", text: "One last thing before I send this for assessment — want to take card payments too? You can add " + ((brand && brand.pos_blurb) || ("a " + ((brand && brand.name) || "Corvo") + " " + ((brand && brand.pos_term) || "card reader"))) + ", free for your first year. Totally optional." }]));
+    setItems((it) => it.concat([{ kind: "message", speaker: "agent", text: "One last thing before I send this for assessment — want to take card payments too? You can add " + ((brand && brand.pos_blurb) || ("a " + ((brand && brand.name) || "Barclays") + " " + ((brand && brand.pos_term) || "card reader"))) + ", free for your first year. Totally optional." }]));
     await sleep(paced(260));
     setItems((it) => it.concat([{ kind: "pos", id: "pos-" + Date.now() }]));
   }
@@ -484,7 +484,7 @@ function App({ brand, persona, transport, loanOptions, posOffer, disbursementAcc
     setPackageChoice(take ? "added" : "skipped");
     setFile((prev) => {
       const f = JSON.parse(JSON.stringify(prev));
-      f.pos = take ? { added: true, name: (posOffer && posOffer.name) || (((brand && brand.name) || "Corvo") + " " + ((brand && brand.pos_term) || "Card Reader")) } : { added: false };
+      f.pos = take ? { added: true, name: (posOffer && posOffer.name) || (((brand && brand.name) || "Barclays") + " " + ((brand && brand.pos_term) || "Card Reader")) } : { added: false };
       return f;
     });
     run("submit for assessment", { variant: "pos", label: take ? "Added " + ((brand && brand.pos_term) || "EFTPOS") + " — free for a year" : "Skipped " + ((brand && brand.pos_term) || "EFTPOS") });

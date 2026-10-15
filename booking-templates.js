@@ -49,7 +49,7 @@ window.BOOKING_TEMPLATES = {
       ],
       "disbursement": {
         "account_name": "Thornfield Precision Engineering Ltd",
-        "bank": "Corvo",
+        "bank": "Barclays",
         "account_masked": "**** 2910"
       },
       "indicative_offer": {

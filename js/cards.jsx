@@ -24,7 +24,7 @@ function fmtDate(iso) {
   catch (e) { return iso; }
 }
 /* brand name (reads brand at call time) */
-function brandName() { return (window.TALBrand && window.TALBrand.name) || "Corvo"; }
+function brandName() { return (window.TALBrand && window.TALBrand.name) || "Barclays"; }
 
 const DOC_ICON = {
   claim_form: CDoc,
@@ -246,7 +246,7 @@ function BankCardFace({ name, type, masked }) {
     <div className="bankcard">
       <span className="bankcard-glow" aria-hidden="true"></span>
       <div className="bankcard-row1">
-        <img className="bankcard-logo" src={(window.TALBrand && window.TALBrand.logo) || "corvo-logo.png"} alt={brandName()} />
+        <img className="bankcard-logo" src={(window.TALBrand && window.TALBrand.logo) || "barclays-logo.svg"} alt={brandName()} />
         <span className="bankcard-type">{type}</span>
       </div>
       <span className="bankcard-chip" aria-hidden="true"></span>

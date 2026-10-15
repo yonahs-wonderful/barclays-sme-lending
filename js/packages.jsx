@@ -46,7 +46,7 @@ function PosOffer({ ctx }) {
   const locked = !!choice;
   const busy = ctx.busy;
   const priceAfter = offer.price_after || "£29";
-  const brandNm = (window.TALBrand && window.TALBrand.name) || "Corvo";
+  const brandNm = (window.TALBrand && window.TALBrand.name) || "Barclays";
   // Card-acceptance product label. Brand-driven via brand.config.
   // its UK card-reader term); falls back to a neutral "Card Reader" if unset.
   const posTerm = (window.TALBrand && window.TALBrand.pos_term) || "Card Reader";

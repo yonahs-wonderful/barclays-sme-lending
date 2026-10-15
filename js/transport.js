@@ -162,7 +162,7 @@
     var phase = "start";
 
     function normalizeLiveString(value) {
-      var brandName = (window.TALBrand && window.TALBrand.name) || "Corvo";
+      var brandName = (window.TALBrand && window.TALBrand.name) || "Barclays";
       var agentName = (window.TALBrand && window.TALBrand.agent_name) || "Talia";
       var personaName = window.TALPersonaName || "James Thornfield";
       var firstName = String(personaName).split(" ")[0] || "James";

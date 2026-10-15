@@ -1,33 +1,30 @@
 {
-  "_comment": "Corvo brand config for the bank-demo client UI. SINGLE SOURCE OF TRUTH for visual identity.",
-
+  "_comment": "Barclays brand config for the bank-demo client UI. SINGLE SOURCE OF TRUTH for visual identity.",
   "brand": {
-    "name": "Corvo",
+    "name": "Barclays",
     "product_label": "Business Banking",
-    "logo": "./corvo-logo.png?v=20260706-corvo",
-    "logo_alt": "Corvo",
+    "logo": "./barclays-logo.svg",
+    "logo_alt": "Barclays",
     "agent_name": "Talia",
     "agent_title": "relationship banking",
     "agent_avatar": "T",
     "trust_count": "10M+",
     "trust_audience": "businesses",
     "pos_term": "Business next-best action",
-    "pos_blurb": "a Corvo business specialist review"
+    "pos_blurb": "a Barclays business specialist review"
   },
-
   "tokens": {
-    "brand": "#0F5F46",
-    "brand-600": "#0A4F3B",
-    "brand-700": "#06392E",
+    "brand": "#007EB6",
+    "brand-600": "#006A9B",
+    "brand-700": "#005781",
     "brand-on": "#ffffff",
-    "brand-tint": "#E7F4EF",
-    "fill-dark": "#0F5F46",
-    "fill-dark-2": "#0A4F3B",
-    "shadow-glow": "0 16px 50px rgba(15, 95, 70, 0.20)",
-    "ring-focus": "0 0 0 3px rgba(15, 95, 70, 0.30)",
+    "brand-tint": "#E6F5FC",
+    "fill-dark": "#007EB6",
+    "fill-dark-2": "#006A9B",
+    "shadow-glow": "0 16px 50px rgba(0, 126, 182, 0.20)",
+    "ring-focus": "0 0 0 3px rgba(0, 126, 182, 0.30)",
     "grad-brand": "linear-gradient(135deg, var(--brand-700) 0%, var(--brand-600) 48%, var(--brand) 100%)"
   },
-
   "locale": "en-GB",
   "currency": "GBP"
 }
